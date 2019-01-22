@@ -1,0 +1,88 @@
+#include<iostream>
+#include<fstream>
+
+using namespace std;
+
+unsigned int storedPasscode;
+char fileName[]="PassCode_DB.txt";
+fstream file;
+
+void init(void)
+{	
+	unsigned int passcode=0;
+	file.open(fileName,ios::in);
+	char temp;
+	do
+	{
+		temp=file.get();
+		if(temp<'0'||temp>'9'){ break; }
+		else{passcode=passcode*10+((int)temp-(int)'0');}
+	}while(!file.eof());
+//	cout<<passcode<<endl;
+	storedPasscode=passcode;
+	file.close();
+	return;
+}
+
+unsigned int hashPasscode(unsigned int x)
+{
+	unsigned int intermediate=7*x+(x*x)-13;
+	intermediate=intermediate>>1;
+	return intermediate;
+}
+
+void subroutine()
+{
+	cout<<"Subroutine running Dude";
+}
+
+bool enterOkay(unsigned int x)
+{	
+	//cout<<endl<<hashPasscode(x)<<endl;
+	return storedPasscode==hashPasscode(x);
+}
+
+void openFile()
+{
+	unsigned int x;
+	cout<<"Enter passCode ####:\t";
+	cin>>x;
+	while(x>9999||x<999){cout<<"Enter four digit Dude!\n";cin>>x;}
+	if(enterOkay(x)){subroutine();}
+	else {cout<<"xxxx Wrong passcode  xxxxx";}
+	return;
+}
+
+int main(void);
+
+void newPasscode()
+{
+	unsigned int x;
+	cout<<"enter old passcode:####\t";
+	cin>>x; 
+	if(enterOkay(x)){
+	cout<<"Enter new passCode: ";
+	cin>>x;while(x>9999||x<999){cout<<"Enter four digit Dude!\n";cin>>x;}
+	storedPasscode=hashPasscode(x);
+//	cout<<"New hash value:"<<storedPasscode<<endl;
+	
+	file.open(fileName,ios::out);
+	file<<storedPasscode;	
+	file.close();
+	
+	cout<<"\n Done!"<<endl<<endl;main();}
+	else cout<<"xxxxx Wrong passcode xxxx";
+	return;
+}
+
+int main()
+{	
+	init();
+	cout<<"********Welcome Bstark*****\n\n";
+	cout<<"Wanted to enter subroutine? y/n:\t";
+	char temp; cin>>temp; if(temp=='y'||temp=='Y'){ openFile();}
+	else {cout<<"Wanna enter new password? y/n:\t"; cin>>temp;if(temp=='y'||temp=='Y'){newPasscode();}}
+//cout<<hashPasscode(1234);	
+	
+	return 0;
+}
