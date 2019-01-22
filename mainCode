@@ -4,7 +4,7 @@
 using namespace std;
 
 unsigned int storedPasscode;
-char fileName[]="PassCode_DB.txt";
+char fileName[]="PassCode_BS.txt";
 fstream file;
 
 void init(void)
